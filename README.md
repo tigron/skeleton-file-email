@@ -17,3 +17,6 @@ Get an email
 
 	$file = \Skeleton\File\File::get_by_id(1);
 
+Extract all attachments from the Email
+
+	$attachments = $file->extract_attachments();
