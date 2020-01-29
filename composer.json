@@ -3,7 +3,8 @@
     "description": "Tigron Raw Email utilities",
     "type": "library",
     "require": {
-		"tigron/skeleton-file": "*"
+		"tigron/skeleton-file": "*",
+		"zbateson/mail-mime-parser": "^1.2"
     },
     "license": "MIT",
     "authors": [
