@@ -1,0 +1,22 @@
+{
+    "name": "tigron/skeleton-file-email",
+    "description": "Tigron Raw Email utilities",
+    "type": "library",
+    "require": {
+		"tigron/skeleton-file": "*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tigron BVBA",
+            "email": "support@tigron.be"
+        }
+    ],
+    "support": {
+        "source": "https://github.com/tigron/skeleton-file-email",
+        "issues": "https://github.com/tigron/skeleton-file-email/issues"
+    },
+    "autoload": {
+        "psr-4": { "Skeleton\\File\\Email\\": "lib/Skeleton/File/Email" }
+    }
+}
