@@ -89,7 +89,24 @@ class Email extends File {
 			'name' => $message->getHeader('from')->getPersonName(),
 			'email' => $message->getHeaderValue('from'),
 		];
+
 		return $from;
+	}
+
+	/**
+	 * Get to
+	 *
+	 * @access public
+	 * @return string $to
+	 */
+	public function get_to() {
+		$message = $this->read_message();
+		$to = [
+			'name' => $message->getHeader('to')->getPersonName(),
+			'email' => $message->getHeaderValue('to'),
+		];
+
+		return $to;
 	}
 
 	/**
