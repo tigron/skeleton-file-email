@@ -38,6 +38,61 @@ class Email extends File {
 	}
 
 	/**
+	 * Get the html content of the email
+	 *
+	 * @access public
+	 * @return string $html
+	 */
+	public function get_content() {
+		$message = $this->read_message();
+
+		$content = $message->getHtmlContent();
+
+		if (trim($content) == '') {
+			$content = $message->getTextContent();
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Get subject
+	 *
+	 * @access public
+	 * @return string $subject
+	 */
+	public function get_subject() {
+		$message = $this->read_message();
+		return $message->getHeaderValue('subject');
+	}
+
+	/**
+	 * Get date
+	 *
+	 * @access public
+	 * @return string $subject
+	 */
+	public function get_date() {
+		$message = $this->read_message();
+		return date('Y-m-d H:i:s', strtotime($message->getHeaderValue('date')));
+	}
+
+	/**
+	 * Get from
+	 *
+	 * @access public
+	 * @return string $from
+	 */
+	public function get_from() {
+		$message = $this->read_message();
+		$from = [
+			'name' => $message->getHeader('from')->getPersonName(),
+			'email' => $message->getHeaderValue('from'),
+		];
+		return $from;
+	}
+
+	/**
 	 * Parse the message
 	 *
 	 * @access private
@@ -46,7 +101,7 @@ class Email extends File {
 	private function read_message() {
 		if ($this->message === null) {
 			$mailParser = new \ZBateson\MailMimeParser\MailMimeParser();
-			$this->message = $mailParser->parse($incoming->file->get_contents());
+			$this->message = $mailParser->parse($this->get_contents());
 		}
 		return $this->message;
 	}
