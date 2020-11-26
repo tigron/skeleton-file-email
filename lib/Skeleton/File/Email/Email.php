@@ -85,6 +85,11 @@ class Email extends File {
 	 */
 	public function get_from() {
 		$message = $this->read_message();
+
+		if ($message->getHeader('from') === null) {
+			return ['name' => '', 'email' => ''];
+		}
+
 		$from = [
 			'name' => $message->getHeader('from')->getPersonName(),
 			'email' => $message->getHeaderValue('from'),
@@ -101,6 +106,11 @@ class Email extends File {
 	 */
 	public function get_to() {
 		$message = $this->read_message();
+
+		if ($message->getHeader('to') === null) {
+			return ['name' => '', 'email' => ''];
+		}
+
 		$to = [
 			'name' => $message->getHeader('to')->getPersonName(),
 			'email' => $message->getHeaderValue('to'),
