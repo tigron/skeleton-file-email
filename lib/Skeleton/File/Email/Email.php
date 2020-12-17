@@ -30,10 +30,22 @@ class Email extends File {
 		$message = $this->read_message();
 		$attachment_parts = $message->getAllAttachmentParts();
 		$attachments = [];
+
+		$index = 0;
 		foreach ($attachment_parts as $attachment_part) {
-			$attachment = \Skeleton\File\File::store($attachment_part->getFilename(), $attachment_part->getContent());
+			if (empty($attachment_part->getFilename())) {
+				$filename = 'attachment_' . $index;
+			} else {
+				$filename = $attachment_part->getFilename();
+			}
+
+
+			$attachment = \Skeleton\File\File::store($filename, $attachment_part->getContent());
 			$attachments[] = $attachment;
+
+			$index++;
 		}
+
 		return $attachments;
 	}
 
