@@ -50,6 +50,34 @@ class Email extends File {
 	}
 
 	/**
+	 * Has attachments
+	 *
+	 * @access public
+	 * @return boolean $has_attachments
+	 */
+	public function has_attachments() {
+		$message = $this->read_message();
+		$attachment_parts = $message->getAllAttachmentParts();
+		if (count($attachment_parts) > 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Count attachments
+	 *
+	 * @access public
+	 * @return boolean $has_attachments
+	 */
+	public function count_attachments() {
+		$message = $this->read_message();
+		$attachment_parts = $message->getAllAttachmentParts();
+		return count($attachment_parts);
+	}
+
+	/**
 	 * Get the html content of the email
 	 *
 	 * @access public
@@ -93,42 +121,68 @@ class Email extends File {
 	 * Get from
 	 *
 	 * @access public
-	 * @return string $from
+	 * @return Contact $contact
 	 */
 	public function get_from() {
 		$message = $this->read_message();
 
-		if ($message->getHeader('from') === null) {
-			return ['name' => '', 'email' => ''];
+		$from = $message->getHeader('from');
+		if ($from === null) {
+			return new Contact();
 		}
 
-		$from = [
-			'name' => $message->getHeader('from')->getPersonName(),
-			'email' => $message->getHeaderValue('from'),
-		];
-
-		return $from;
+		$contact = new Contact();
+		$contact->name = $from->getPersonName();
+		$contact->email = $from->getEmail();
+		return $contact;
 	}
 
 	/**
 	 * Get to
 	 *
 	 * @access public
-	 * @return string $to
+	 * @return Contact[] $contacts
 	 */
 	public function get_to() {
 		$message = $this->read_message();
 
-		if ($message->getHeader('to') === null) {
-			return ['name' => '', 'email' => ''];
+		$to = $message->getHeader('To');
+		if ($to === null) {
+			return [];
 		}
+		$addresses = $to->getAddresses();
+		$contacts = [];
+		foreach ($addresses as $address) {
+			$contact = new Contact();
+			$contact->email = $address->getEmail();
+			$contact->name = $address->getName();
+			$contacts[] = $contact;
+		}
+		return $contacts;
+	}
 
-		$to = [
-			'name' => $message->getHeader('to')->getPersonName(),
-			'email' => $message->getHeaderValue('to'),
-		];
+	/**
+	 * Get cc
+	 *
+	 * @access public
+	 * @return Contact[] $contacts
+	 */
+	public function get_cc() {
+		$message = $this->read_message();
 
-		return $to;
+		$to = $message->getHeader('Cc');
+		if ($to === null) {
+			return [];
+		}
+		$addresses = $to->getAddresses();
+		$contacts = [];
+		foreach ($addresses as $address) {
+			$contact = new Contact();
+			$contact->email = $address->getEmail();
+			$contact->name = $address->getName();
+			$contacts[] = $contact;
+		}
+		return $contacts;
 	}
 
 	/**
