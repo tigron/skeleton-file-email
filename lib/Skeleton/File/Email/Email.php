@@ -103,7 +103,6 @@ class Email extends File {
 			function ($matches) {
 				$message = $this->read_message();			
 				$part = $message->getPartByContentId($matches[1]);
-				print_r($part->getContentType());
 				
 				$content = str_replace('cid:' . $matches[1], 'data:' . $part->getContentType() . ';base64,' . base64_encode($part->getContent()), $matches[0]);	
 				return $content;
