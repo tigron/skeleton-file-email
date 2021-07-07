@@ -99,7 +99,7 @@ class Email extends File {
 		preg_match_all('/src="cid:(.*)" /U', $content, $output_array);
 
 
-		$content = preg_replace_callback('/src="cid:(.*)" /U',
+		$content = preg_replace_callback('/src="cid:(.*)"/U',
 			function ($matches) {
 				$message = $this->read_message();			
 				$part = $message->getPartByContentId($matches[1]);
