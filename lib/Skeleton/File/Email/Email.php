@@ -83,7 +83,7 @@ class Email extends File {
 	 * @access public
 	 * @return string $html
 	 */
-	public function get_content() {
+	public function get_content($replace_inline_images = false) {
 		$message = $this->read_message();
 
 		$content = $message->getHtmlContent();
@@ -91,6 +91,25 @@ class Email extends File {
 		if (trim($content) == '') {
 			$content = $message->getTextContent();
 		}
+
+		if (!$replace_inline_images) {
+			return $content;
+		}
+
+		preg_match_all('/src="cid:(.*)" /U', $content, $output_array);
+
+
+		$content = preg_replace_callback('/src="cid:(.*)" /U',
+			function ($matches) {
+				$message = $this->read_message();			
+				$part = $message->getPartByContentId($matches[1]);
+				print_r($part->getContentType());
+				
+				$content = str_replace('cid:' . $matches[1], 'data:' . $part->getContentType() . ';base64,' . base64_encode($part->getContent()), $matches[0]);	
+				return $content;
+			},
+			$content
+		);
 
 		return $content;
 	}
