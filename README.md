@@ -48,8 +48,11 @@ Get the subject
     $email->get_subject();
 
 Get the content
+The extra parameter requests a replacement of every cid 
+reference by its base64-encoded content. This way the output
+can directly be shown in the browser.
 
-    $email->get_content();
+    $email->get_content($replace_inline_images = false);
 
 Get the date
 
